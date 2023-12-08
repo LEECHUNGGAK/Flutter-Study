@@ -7,7 +7,18 @@ class ListPage extends StatelessWidget {
     // 1-3. 리스트 화면 (동적 데이터 추가)
 
     // 1-3. 리스트 화면 (초기 리스트 구현)
-    return const Center(child: Text("list"));
+    return ListView(
+      children: const [
+        Padding(padding: EdgeInsets.all(8.0), child: Text("신과함께-죄와벌"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("저스티스 리그"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("로트:라그나로크"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("러빙 빈센트"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("범죄도시"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("꾼"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("쥬만지: 새로운 세계"),),
+        Padding(padding: EdgeInsets.all(8.0), child: Text("뽀로로 극장판 공룡섬 대모험"),),
+      ],
+    );
   }
 }
 
