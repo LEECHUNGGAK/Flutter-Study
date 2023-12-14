@@ -8,15 +8,52 @@ class ListPage extends StatelessWidget {
 
     // 1-3. 리스트 화면 (초기 리스트 구현)
     return ListView(
-      children: const [
-        Padding(padding: EdgeInsets.all(8.0), child: Text("신과함께-죄와벌"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("저스티스 리그"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("로트:라그나로크"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("러빙 빈센트"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("범죄도시"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("꾼"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("쥬만지: 새로운 세계"),),
-        Padding(padding: EdgeInsets.all(8.0), child: Text("뽀로로 극장판 공룡섬 대모험"),),
+      children: <Widget> [
+        Container(
+          padding: const EdgeInsets.all(4),
+          child: Row(
+            children: <Widget>[
+              Image.network(
+                "https://raw.githubusercontent.com/riflockle7/ref/master/1.%20ImageRef/padakpadak/1.jpg",
+                height: 100,
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: const <Widget>[
+                        Text(
+                          "신과함께-죄와벌",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 8,),
+                        Text("12"),
+                      ],
+                    ),
+                    const SizedBox(height: 10,),
+                    Row(
+                      children: const <Widget>[
+                        Text("펑점 : 139"),
+                        SizedBox(width: 10,),
+                        Text("예매 순위 : 1"),
+                        SizedBox(width: 10,),
+                        Text("예매율 : 35.5"),
+                      ],
+                    ),
+                    const SizedBox(height: 10,),
+                    const Text("개봉일 : 2017-12-20"),
+                  ],
+                ),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            )
+        )
       ],
     );
   }

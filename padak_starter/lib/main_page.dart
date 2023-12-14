@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 
 // 1-2. 탭 화면 (각 화면 import)
-import "list_page.dart"
-import "grid_page.dart"
+import "list_page.dart";
+import "grid_page.dart";
 
 // 1-2. 탭 화면 (Stateless -> Stateful)
 class MainPage extends StatefulWidget {
