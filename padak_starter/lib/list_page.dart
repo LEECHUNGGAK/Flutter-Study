@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'model/data/dummys_repository.dart';
 import 'model/response/movies_response.dart';
+import 'package:padak_starter/detail_page.dart';
 
 // 1-3. 리스트 화면 (임포트)
 class ListPage extends StatelessWidget {
@@ -18,7 +19,19 @@ class ListPage extends StatelessWidget {
 
     return ListView.separated(
       itemBuilder: (context, index) {
-        return ListItemWidget(movie: movies[index]);
+        // return ListItemWidget(movie: movies[index]);
+        
+        // 1-5. 상세화면 연결 (InkWell 사용)
+        return InkWell(
+          child: ListItemWidget(movie: movies[index]),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => DetailPage(movieId: movies[index].id),
+              ),
+            );
+          },
+        );
       },
       separatorBuilder: (_, index) => const Divider(color: Colors.grey,),
       itemCount: movies.length
@@ -38,14 +51,14 @@ class ListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Image.network(movie.thumb, height: 100,),
           Padding(
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -53,7 +66,7 @@ class ListItemWidget extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       movie.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -96,7 +109,7 @@ class ListItemDummyWidget extends StatelessWidget {
                 "https://raw.githubusercontent.com/riflockle7/ref/master/1.%20ImageRef/padakpadak/1.jpg",
                 height: 100,
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +117,7 @@ class ListItemDummyWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const <Widget>[
+                      children: <Widget>[
                         Text(
                           "신과함께-죄와벌",
                           style: TextStyle(
@@ -117,9 +130,9 @@ class ListItemDummyWidget extends StatelessWidget {
                         ListItemGradeImageWidget(grade: 12)
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    SizedBox(height: 10,),
                     Row(
-                      children: const <Widget>[
+                      children: <Widget>[
                         Text("펑점 : 139"),
                         SizedBox(width: 10,),
                         Text("예매 순위 : 1"),
@@ -127,8 +140,8 @@ class ListItemDummyWidget extends StatelessWidget {
                         Text("예매율 : 35.5"),
                       ],
                     ),
-                    const SizedBox(height: 10,),
-                    const Text("개봉일 : 2017-12-20"),
+                    SizedBox(height: 10,),
+                    Text("개봉일 : 2017-12-20"),
                   ],
                 ),
               ),
