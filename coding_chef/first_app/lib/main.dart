@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                 backgroundImage: AssetImage("assets/pikachu.png"),
                 backgroundColor: Colors.white,
               ),
-              otherAccountsPictures: [
+              otherAccountsPictures: const [
                 CircleAvatar(
                   backgroundImage: AssetImage("assets/charmander.png"),
                   backgroundColor: Colors.white,
@@ -230,19 +230,31 @@ class HomePage extends StatelessWidget {
                 radius: 40.0,
               ),
             ),
+            const SizedBox(
+              height: 30.0,
+            ),
             Center(
               child: TextButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hello")));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Hello",
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: Colors.teal,
+                      duration: Duration(milliseconds: 1000),
+                    ),
+                  );
                 },
-                child: Text(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: const Text(
                   "Show me",
                   style: TextStyle(
                     color: Colors.white,
                   ),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
                 ),
               ),
             )
