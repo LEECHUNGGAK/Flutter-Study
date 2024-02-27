@@ -17,3 +17,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+  
+  fonts:
+    - family: Parisienne
+      fonts:
+        - asset: fonts/Parisienne-Regular.ttf
+    
+    - family: Sunflower
+      fonts:
+        - asset: fonts/Sunflower-Light.ttf
+        - asset: fonts/Sunflower-Medium.ttf
+          weight: 500
+        - asset: fonts/Sunflower-Bold.ttf
+          weight: 700
