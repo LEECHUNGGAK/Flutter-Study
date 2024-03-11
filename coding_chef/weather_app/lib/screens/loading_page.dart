@@ -21,7 +21,7 @@ class _LoadingPageState extends State<LoadingPage> {
 
     Weather weather = Weather(myPosition.myLatitude, myPosition.myLongitude);
     await weather.getWeather();
-    Map<String, dynamic>? weatherData = await weather.getWeather();
+    Map<String, dynamic> weatherData = await weather.getWeather();
 
     print(weatherData);
 

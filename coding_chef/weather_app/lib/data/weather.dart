@@ -9,17 +9,16 @@ class Weather {
 
   Weather(this.latitude, this.longitude);
 
-  // Future<dynamic> getWeather() async {
-  Future<Map<String, dynamic>?> getWeather() async {
+  Future<Map<String, dynamic>> getWeather() async {
     Response response =
         await dio.get('https://api.openweathermap.org/data/2.5/weather'
             '?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
 
-    if (response.statusCode == 200) {
-      return response.data;
-      print(response.data);
-    } else {
-      return null;
+    if (response.statusCode != 200) {
+      return {};
     }
+
+    return response.data;
+    
   }
 }
