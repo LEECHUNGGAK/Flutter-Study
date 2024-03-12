@@ -20,16 +20,18 @@ class _LoadingPageState extends State<LoadingPage> {
     await myPosition.getMyPosition();
 
     Weather weather = Weather(myPosition.myLatitude, myPosition.myLongitude);
-    await weather.getWeather();
     Map<String, dynamic> weatherData = await weather.getWeather();
+    Map<String, dynamic> airPollutionData = await weather.getAirPollution();
 
     print(weatherData);
+    print(airPollutionData);
 
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
         return WeatherPage(
           weatherData: weatherData,
+          airPollutionData: airPollutionData,
         );
       }),
     );

@@ -11,14 +11,28 @@ class Weather {
 
   Future<Map<String, dynamic>> getWeather() async {
     Response response =
-        await dio.get('https://api.openweathermap.org/data/2.5/weather'
-            '?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
+        await dio.get(
+          'https://api.openweathermap.org/data/2.5/weather'
+          '?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric'
+        );
 
     if (response.statusCode != 200) {
       return {};
     }
 
     return response.data;
-    
+  }
+
+  Future<Map<String, dynamic>> getAirPollution() async {
+    Response response = await dio.get(
+      'http://api.openweathermap.org/data/2.5/air_pollution'
+      '?lat=$latitude&lon=$longitude&appid=$apiKey'
+    );
+
+    if (response.statusCode != 200) {
+      return {};
+    }
+
+    return response.data;
   }
 }
