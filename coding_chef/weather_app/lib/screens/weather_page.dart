@@ -63,8 +63,9 @@ class _WeatherPageState extends State<WeatherPage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surfaceVariant,
       appBar: AppBar(
-        backgroundColor: colorScheme.surfaceVariant,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.near_me),
@@ -76,9 +77,8 @@ class _WeatherPageState extends State<WeatherPage> {
           ),
         ],
       ),
-      body: Container(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        color: Theme.of(context).colorScheme.surfaceVariant,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -266,3 +266,4 @@ String getAQIDescription(int aqi) {
 
   return description;
 }
+

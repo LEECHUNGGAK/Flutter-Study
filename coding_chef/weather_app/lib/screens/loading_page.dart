@@ -46,13 +46,9 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            fetchData();
-          },
-          child: const Text('Get my location'),
-        ),
+        child: CircularProgressIndicator(),
       ),
     );
   }
