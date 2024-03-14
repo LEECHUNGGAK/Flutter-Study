@@ -13,6 +13,11 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontSize: 32.0),
+          displayMedium: TextStyle(fontSize: 28.0),
+          displaySmall: TextStyle(fontSize: 20.0),
+        ),
       ),
       home: const SignInPage(),
     );
