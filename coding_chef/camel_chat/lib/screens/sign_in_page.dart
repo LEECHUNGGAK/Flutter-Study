@@ -1,9 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:camel_chat/screens/chat_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+  final _formGlobalKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+
+  SignInPage({super.key});
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -11,10 +15,11 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool signUpFlag = false;
-  final _formGlobalKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
-  String nickName = '';
+  String userEmail = '';
+  String userPassword = '';
+  String userNickname = '';
+  bool formValidFlag = false;
+  UserCredential? newUser;
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +196,7 @@ class _SignInPageState extends State<SignInPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Form(
-                            key: _formGlobalKey,
+                            key: widget._formGlobalKey,
                             child: Column(
                               children: [
                                 TextFormField(
@@ -206,9 +211,9 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                   onSaved: (newValue) {
                                     if (newValue == null) {
-                                      email = '';
+                                      userEmail = '';
                                     } else {
-                                      email = newValue;
+                                      userEmail = newValue;
                                     }
                                   },
                                   validator: (value) {
@@ -233,9 +238,9 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                   onSaved: (newValue) {
                                     if (newValue == null) {
-                                      password = '';
+                                      userPassword = '';
                                     } else {
-                                      password = newValue;
+                                      userPassword = newValue;
                                     }
                                   },
                                   validator: (value) {
@@ -263,9 +268,9 @@ class _SignInPageState extends State<SignInPage> {
                                     ),
                                     onSaved: (newValue) {
                                       if (newValue == null) {
-                                        nickName = '';
+                                        userNickname = '';
                                       } else {
-                                        nickName = newValue;
+                                        userNickname = newValue;
                                       }
                                     },
                                     validator: (value) {
@@ -293,8 +298,73 @@ class _SignInPageState extends State<SignInPage> {
               left: 0.0,
               right: 0.0,
               child: GestureDetector(
-                onTap: () {
-                  _formGlobalKey.currentState!.validate();
+                onTap: () async {
+                  formValidFlag =
+                      widget._formGlobalKey.currentState!.validate();
+
+                  if (formValidFlag) {
+                    widget._formGlobalKey.currentState!.save();
+                  }
+
+                  if (signUpFlag) {
+                    try {
+                      newUser =
+                          await widget._auth.createUserWithEmailAndPassword(
+                        email: userEmail,
+                        password: userPassword,
+                      );
+
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          // 문서의 ID를 지정합니다.
+                          .doc(newUser!.user!.uid)
+                          // 문서의 필드와 값을 지정합니다.
+                          .set({'nickname': userNickname});
+
+                      // if (context.mounted) {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => ChatPage(),
+                      //     ),
+                      //   );
+                      // }
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Please check your email and password!'),
+                          ),
+                        );
+                      }
+                    }
+                  } else {
+                    try {
+                      newUser = await widget._auth.signInWithEmailAndPassword(
+                        email: userEmail,
+                        password: userPassword,
+                      );
+
+                      // if (context.mounted) {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => ChatPage(),
+                      //     ),
+                      //   );
+                      // }
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Please check your email and password!'),
+                          ),
+                        );
+                      }
+                    }
+                  }
                 },
                 child: Container(
                   width: 90.0,
