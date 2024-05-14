@@ -1,15 +1,24 @@
+import 'package:camel_chat/components/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatMessages extends StatelessWidget {
-  const ChatMessages({super.key});
+  final user = FirebaseAuth.instance.currentUser;
+
+  ChatMessages({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('chats2').snapshots(),
-      builder: ((context, snapshot) {
-
+      stream: FirebaseFirestore.instance
+          .collection('chats')
+          .orderBy(
+            'sending_date',
+            descending: true,
+          )
+          .snapshots(),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -23,12 +32,16 @@ class ChatMessages extends StatelessWidget {
         }
 
         return ListView.builder(
+          reverse: true,
           itemCount: docs.length,
           itemBuilder: ((context, index) {
-            return Text(docs[index]['content']);
+            return ChatBubble(
+              isMe: docs[index]['userID'] == user!.uid,
+              messageContent: docs[index]['content'],
+            );
           }),
         );
-      }),
+      },
     );
   }
 }

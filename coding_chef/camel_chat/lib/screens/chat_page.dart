@@ -1,8 +1,8 @@
 import 'package:camel_chat/components/chat_messages.dart';
+import 'package:camel_chat/components/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 
 class ChatPage extends StatefulWidget {
   final _auth = FirebaseAuth.instance;
@@ -30,12 +30,14 @@ class _ChatPageState extends State<ChatPage> {
             icon: const Icon(Icons.logout),
           ),
         ],
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       ),
       body: Column(
         children: [
           Expanded(
             child: ChatMessages(),
           ),
+          const NewMessage(),
         ],
       ),
     );
