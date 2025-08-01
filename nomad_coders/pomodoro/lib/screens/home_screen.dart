@@ -38,11 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  onPausePressed() {
+  void onPausePressed() {
     timer.cancel();
 
     setState(() {
       isRunning = false;
+    });
+  }
+
+  void onResetPressed() {
+    if (isRunning) {
+      timer.cancel();
+      setState(() {
+        isRunning = false;
+      });
+    }
+    setState(() {
+      totalSeconds = twentyFiveMinutes;
     });
   }
 
@@ -76,15 +88,26 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 3,
             child: Container(
               child: Center(
-                child: IconButton(
-                  onPressed: isRunning ? onPausePressed : onStartPressed,
-                  icon: Icon(
-                    isRunning
-                        ? Icons.pause_circle_outline
-                        : Icons.play_circle_outline,
-                  ),
-                  iconSize: 120,
-                  color: Theme.of(context).cardColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: isRunning ? onPausePressed : onStartPressed,
+                      icon: Icon(
+                        isRunning
+                            ? Icons.pause_circle_outline
+                            : Icons.play_circle_outline,
+                      ),
+                      iconSize: 120,
+                      color: Theme.of(context).cardColor,
+                    ),
+                    IconButton(
+                      onPressed: onResetPressed,
+                      icon: Icon(Icons.restart_alt_outlined),
+                      iconSize: 60,
+                      color: Theme.of(context).cardColor,
+                    ),
+                  ],
                 ),
               ),
             ),
