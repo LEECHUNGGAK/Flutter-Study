@@ -3,12 +3,19 @@ import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class WebtoonEpisode extends StatelessWidget {
-  const WebtoonEpisode({super.key, required this.episode});
+  const WebtoonEpisode({
+    super.key,
+    required this.episode,
+    required this.webtoonId,
+  });
 
+  final String webtoonId;
   final WebtoonEpisodeModel episode;
 
   onButtonTap() async {
-    await launchUrlString("https://google.com");
+    await launchUrlString(
+      'https://comic.naver.com/webtoon/detail?titleId=$webtoonId&no=${episode.id}',
+    );
   }
 
   @override
