@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
           // 앱 테마의 색 구성표를 변경합니다.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
-        home: HomePage(),
+        home: const HomePage(),
       ),
     );
   }
@@ -29,8 +29,14 @@ class MainApp extends StatelessWidget {
 // 앱이 동작하는 데 필요한 데이터를 정의합니다.
 class MainAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var history = <WordPair>[];
+  GlobalKey? historyListKey;
 
   void getNext() {
+    history.insert(0, current);
+    var animatedList = historyListKey?.currentState as AnimatedListState?;
+    // 해당 인덱스에 새로운 아이템을 추가했다고 알려 애니메이션을 구동합니다.
+    animatedList?.insertItem(0);
     current = WordPair.random();
     // MyAppState를 추적하는 위젯에게 알림을 보냅니다.
     notifyListeners();
@@ -38,12 +44,19 @@ class MainAppState extends ChangeNotifier {
 
   var favorites = <WordPair>[];
 
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
+  void toggleFavorite([WordPair? pair]) {
+    pair = pair ?? current;
+
+    if (favorites.contains(pair)) {
+      favorites.remove(pair);
     } else {
-      favorites.add(current);
+      favorites.add(pair);
     }
+    notifyListeners();
+  }
+
+  void deleteFavorite(WordPair pair) {
+    favorites.remove(pair);
     notifyListeners();
   }
 }
@@ -64,12 +77,12 @@ class _HomePageState extends State<HomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = GeneratorPage();
+        page = const GeneratorPage();
         break;
       case 1:
         // Placeholder는 교차 사각형을 그려 미완성 UI임을 표시하는 위젯입니다.
         // page = Placeholder();
-        page = FavoritesPage();
+        page = const FavoritesPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -89,7 +102,7 @@ class _HomePageState extends State<HomePage> {
               child: NavigationRail(
                 // HomePage 위젯의 가로가 600 픽셀 이상일 때 true로 설정합니다.
                 extended: constraints.maxWidth >= 600,
-                destinations: [
+                destinations: const [
                   NavigationRailDestination(
                     icon: Icon(Icons.home),
                     label: Text('Home'),
@@ -141,9 +154,16 @@ class GeneratorPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('A random AWESOME idea:'),
+          const Spacer(),
+          const Expanded(
+            flex: 3,
+            child: HistoryViewList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           BigCard(pair: pair),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           Row(
@@ -153,21 +173,80 @@ class GeneratorPage extends StatelessWidget {
                 onPressed: () {
                   appState.toggleFavorite();
                 },
-                label: Text('Like'),
+                label: const Text('Like'),
                 icon: Icon(icon),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10.0,
               ),
               ElevatedButton(
                 onPressed: () {
                   appState.getNext();
                 },
-                child: Text('Next'),
+                child: const Text('Next'),
               ),
             ],
           ),
+          const Spacer(
+            flex: 2,
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class HistoryViewList extends StatefulWidget {
+  const HistoryViewList({
+    super.key,
+  });
+
+  @override
+  State<HistoryViewList> createState() => _HistoryViewListState();
+}
+
+class _HistoryViewListState extends State<HistoryViewList> {
+  final _key = GlobalKey();
+  static const Gradient _maskingGradient = LinearGradient(
+    colors: [Colors.transparent, Colors.black],
+    stops: [0.0, 0.5],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MainAppState>();
+    var history = appState.history;
+    appState.historyListKey = _key;
+
+    return ShaderMask(
+      shaderCallback: (bounds) => _maskingGradient.createShader(bounds),
+      blendMode: BlendMode.dstIn,
+      child: AnimatedList(
+        key: _key,
+        reverse: true,
+        initialItemCount: history.length,
+        itemBuilder: (context, index, animation) {
+          final pair = history[index];
+          return SizeTransition(
+            sizeFactor: animation,
+            child: Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite(pair);
+                },
+                icon: appState.favorites.contains(pair)
+                    ? const Icon(Icons.favorite)
+                    : const SizedBox(),
+                label: Text(
+                  pair.asLowerCase,
+                  semanticsLabel: '${pair.first} ${pair.second}',
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -216,22 +295,37 @@ class FavoritesPage extends StatelessWidget {
     var favorites = appState.favorites;
 
     if (favorites.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('No favorites yet!'),
       );
     }
 
-    return ListView(
+    return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Text('You have ${favorites.length} favorites:'),
         ),
-        for (var pair in favorites)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
-          )
+        Expanded(
+          child: GridView(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 400,
+              childAspectRatio: 400 / 80,
+            ),
+            children: [
+              for (var pair in favorites)
+                ListTile(
+                  leading: IconButton(
+                    onPressed: () {
+                      appState.deleteFavorite(pair);
+                    },
+                    icon: const Icon(Icons.delete_outline),
+                  ),
+                  title: Text(pair.asLowerCase),
+                )
+            ],
+          ),
+        ),
       ],
     );
   }
