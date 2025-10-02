@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.16.0
-  flutter_animate: ^4.5.0
-  google_fonts: ^6.1.0
+  flame: ^1.28.1
+  flutter_animate: ^4.5.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
