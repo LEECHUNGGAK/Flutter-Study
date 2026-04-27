@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
-import 'package:klondike/components/Pile.dart';
+import 'package:klondike/components/pile.dart';
 import 'package:klondike/components/foundation.dart';
 import 'package:klondike/components/waste.dart';
 import 'package:klondike/components/stock.dart';
